@@ -1,24 +1,33 @@
 <?php
 namespace Tonis\Hookline;
 
+use Tonis\Hookline\Exception\InvalidHookException;
 use Tonis\Hookline\Exception\MissingMethodException;
 
 class HookContainer
 {
     /** @var \SplPriorityQueue */
     private $hooks;
+    /** @var string */
+    private $instanceOf;
 
-    public function __construct()
+    public function __construct($instanceOf = null)
     {
         $this->hooks = new \SplPriorityQueue();
+        $this->instanceOf = $instanceOf ? $instanceOf : HookInterface::class;
     }
 
     /**
-     * @param HookInterface $hook
+     * @param mixed $hook
      * @param int $priority
      */
-    public function add(HookInterface $hook, $priority = 0)
+    public function add($hook, $priority = 0)
     {
+        if (!$hook instanceof $this->instanceOf) {
+            throw new InvalidHookException(
+                sprintf('Hooks registered with this container must be an instanceof %s', $this->instanceOf)
+            );
+        }
         $this->hooks->insert($hook, $priority);
     }
 
