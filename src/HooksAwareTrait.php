@@ -3,16 +3,16 @@ namespace Tonis\Hookline;
 
 trait HooksAwareTrait
 {
-    /** @var HookContainer */
+    /** @var Container */
     private $hooks;
 
     /**
-     * @return HookContainer
+     * @return Container
      */
     public function hooks()
     {
-        if (!$this->hooks instanceof HookContainer) {
-            $this->hooks = new HookContainer();
+        if (!$this->hooks instanceof Container) {
+            $this->hooks = new Container();
         }
         return $this->hooks;
     }
